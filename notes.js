@@ -20,4 +20,10 @@ const callRight = (fn, ...args) =>
   (...remainingArgs) =>
     fn(...remainingArgs, ...args);
 
-    
+// Unary
+const unary = (fn) =>
+  fn.length === 1
+    ? fn
+    : function (something) {
+      return fn.call(this, something);
+    }
