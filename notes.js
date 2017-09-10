@@ -22,8 +22,23 @@ const callRight = (fn, ...args) =>
 
 // Unary
 const unary = (fn) =>
-  fn.length === 1
+  fn.length === 1 // number of args expected by function
     ? fn
     : function (something) {
       return fn.call(this, something);
     }
+
+// Tap
+const tap = (value, fn) => {
+  const curried = (fn) => (
+    // comma evaluates operands, returns last value
+    typeof(fn) === 'function' && fn(value),
+    value
+  );
+
+  return fn === undefined
+    ? curried
+    : curried(fn);
+}
+
+// bookmark: 86 page
