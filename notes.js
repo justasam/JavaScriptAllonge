@@ -41,4 +41,52 @@ const tap = (value, fn) => {
     : curried(fn);
 }
 
-// bookmark: 86 page
+// Maybe
+const maybe = (fn) =>
+  function (...args) {
+    if (args.length === 0) {
+      return;
+    }
+    else {
+      for (let arg of args) {
+        if (arg == null) return;
+      }
+      return fn.apply(this, args);
+    }
+  }
+
+// Once
+const once = (fn) => {
+  let done = false;
+
+  return function () {
+    return done ? void 0 : ((done = true), fn.apply(this, arguments));
+  }
+}
+
+// Left Variadic
+const leftVariadic = (fn) => {
+  if (fn.length < 1) {
+    return fn;
+  }
+  else {
+    return function(...args) {
+      const gathered = args.slice(0, args.length - fn.length + 1),
+            spread   = args.slice(args.length - fn.length + 1);
+
+      return fn.apply(
+        this, [gathered].concat(spread)
+      );
+    }
+  }
+}
+
+// Left Gather
+const leftGather = (outputArrayLength) => {
+  return function (inputArray) {
+    return [inputArray.slice(0, inputArray.length - outputArrayLength + 1)].conc\
+at(
+      inputArray.slice(inputArray.length - outputArrayLength + 1)
+    )
+  }
+}
