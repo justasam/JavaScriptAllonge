@@ -9,9 +9,6 @@ const callLast = (fn, rarg) =>
     return fn.call(this, ...rest, rarg);
   }
 
-const greet = (me, you) =>
-  `Hello, ${you}, my name is ${me}`;
-
 const callLeft = (fn, ...args) =>
   (...remainingArgs) =>
     fn(...args, ...remainingArgs);
