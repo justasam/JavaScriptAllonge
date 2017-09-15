@@ -100,3 +100,15 @@ const flatten = ([first, ...rest]) => {
     return [...flatten(first), ...flatten(rest)];
   }
 }
+
+// map with
+const mapWith = (fn, [first, ...rest]) =>
+  first === undefined
+    ? []
+    : [fn(first), ...mapWith(fn, rest)];
+
+// fold with
+const foldWith = (fn, terminalValue, [first, ...rest]) =>
+  first === undefined
+    ? terminalValue
+    : fn(first, foldWith(fn, terminalValue, rest));
