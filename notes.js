@@ -101,7 +101,7 @@ const flatten = ([first, ...rest]) => {
   }
 }
 
-// map with
+// map with (not TCO)
 const mapWith = (fn, [first, ...rest]) =>
   first === undefined
     ? []
@@ -112,3 +112,30 @@ const foldWith = (fn, terminalValue, [first, ...rest]) =>
   first === undefined
     ? terminalValue
     : fn(first, foldWith(fn, terminalValue, rest));
+
+// map with TCO
+const mapWithDelaysWork = (fn, [first, ...rest], prepend) =>
+  first === undefined
+    ? prepend
+    : mapWithDelaysWork(fn, rest, [...prepend, fn(first)])
+
+const mapWith = callLast(mapWithDelaysWork, [])
+
+// default arguments
+// factorial
+const factorial = (n, work = 1) =>
+  n === 1
+    ? work
+    : factorial(n - 1, n * work);
+
+// length
+const length = ([first, ...rest], numberToBeAdded = 0) =>
+  first === undefined
+    ? numberToBeAdded
+    : length(rest, 1 + numberToBeAdded)
+
+// map with
+const mapWith = (fn, [first, ...rest], prepend = []) =>
+  first === undefined
+    ? prepend
+    : mapWith(fn, rest, [...prepend, fn(first)]);
