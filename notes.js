@@ -180,3 +180,55 @@ const set = (index, value, list, originalList = list) =>
   index === 0
     ? (list.first = value, originalList)
     : set(index - 1, value, rest(list), originalList);
+
+// array iterator & iterator sum
+const arrayIterator = (array) => {
+  let i = 0;
+
+  return () => {
+    const done = i === array.length;
+
+    return {
+      done,
+      value: done ? undefined : array[i++]
+    }
+  }
+}
+
+const iteratorSum = (iterator) => {
+  let eachIteration,
+      sum = 0;
+
+  while ((eachIteration = iterator(), !eachIteration.done)) {
+    sum += eachIteration.value;
+  }
+  return sum;
+}
+
+// self-currying flip
+const flip = (fn) =>
+  function (first, second) {
+    if (arguments.length === 2) {
+      return fn(second, first);
+    }
+    else {
+      return function (second) {
+        return fn(second, first);
+      }
+    }
+  }
+
+// flipping methods
+const flip = (fn) =>
+  function (first, second) {
+    if (arguments.length === 2) {
+      return fn.call(this, second, first);
+    }
+    else {
+      return function (second) {
+        return fn.call(this, second, first);
+      }
+    }
+  }
+
+// page 198
