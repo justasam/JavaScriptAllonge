@@ -139,3 +139,44 @@ const mapWith = (fn, [first, ...rest], prepend = []) =>
   first === undefined
     ? prepend
     : mapWith(fn, rest, [...prepend, fn(first)]);
+
+// linked list helpers
+const copy = (node, head = null, tail = null) => {
+  if (node === EMPTY) {
+    return head;
+  }
+  else if (tail === null) {
+    const { first, rest } = node;
+    const newNode = { first, rest }; // deconstructoring copies el.
+    return copy(rest, newNode, newNode);
+  }
+  else {
+    const { first, rest } = node;
+    const newNode = { first, rest };
+    tail.rest = newNode;
+    return copy(node.rest, head, newNode);
+  }
+}
+
+const first = ({first, rest}) => first;
+const rest = ({first, rest}) => rest;
+
+const reverse = (node, delayed = EMPTY) =>
+  node === EMPTY
+    ? delayed
+    : reverse(rest(node), { first: first(node), rest: delayed });
+
+const mapWith = (fn, node, delayed = EMPTY) =>
+  node === EMPTY
+    ? reverse(delayed)
+    : mapWith(fn, rest(node), { first: fn(first(node)), rest: delayed });
+
+const at = (index, list) =>
+  index === 0
+    ? first(list)
+    : at(index - 1, rest(list));
+
+const set = (index, value, list, originalList = list) =>
+  index === 0
+    ? (list.first = value, originalList)
+    : set(index - 1, value, rest(list), originalList);
